@@ -1,9 +1,7 @@
 (ns consultas.sintaxe
   "Texto da consulta -> AST. Analise sintatica recursiva e sem estado:
   cada funcao recebe a sequencia de tokens e devolve o no reconhecido
-  junto com os tokens que sobraram."
-
-  (:require [clojure.string :as str]))
+  junto com os tokens que sobraram.")
 
 ;; ---------------------------------------------------------------------------
 ;; Erros de sintaxe: sinalizados com ex-info

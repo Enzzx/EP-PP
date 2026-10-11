@@ -3,9 +3,7 @@
   O despacho de cada no e feito com case sobre o tipo do no, sem ramo
   padrao: um no que nao existe na linguagem faz o case falhar nomeando-o.
   A compilacao acontece uma unica vez, antes da execucao; durante a
-  execucao o registro passa por funcoes ja montadas."
-
-  (:require [clojure.string :as str]))
+  execucao o registro passa por funcoes ja montadas.")
 
 (defn- nome-campo [c]
   (if (keyword? c) (name c) (pr-str c)))

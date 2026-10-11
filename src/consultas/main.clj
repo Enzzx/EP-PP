@@ -49,29 +49,30 @@
                     "; "
                     (formatar-valor valor tipo-valor))))))
 
+(defn- estagio-agrupar [ast]
+  (last (filter (fn [[tipo]] (= tipo :agrupar-por)) (:estagios ast))))
+
 (defn- imprimir-resultado [resultado ast esquema]
-  (cond
-    (and (map? resultado) (contains? resultado :erros))
-    (println (str "ERRO: " (first (:erros resultado))))
+  (let [agrupar (estagio-agrupar ast)]
+    (cond
+      (and (map? resultado) (contains? resultado :erros))
+      (println (str "ERRO: " (first (:erros resultado))))
 
-    (number? resultado)
-    (let [[tipo-terminal campo] (:terminal ast)
-          tipos (tipos-do-esquema esquema)]
-      (println (case tipo-terminal
-                 :contar (str resultado)
-                 :soma (formatar-valor resultado (get tipos campo))
-                 :media (formatar-decimal resultado))))
+      (number? resultado)
+      (let [[tipo-terminal campo] (:terminal ast)
+            tipos (tipos-do-esquema esquema)]
+        (println (case tipo-terminal
+                   :contar (str resultado)
+                   :soma (formatar-valor resultado (get tipos campo))
+                   :media (formatar-decimal resultado))))
 
-    (and (sequential? resultado)
-         (every? #(and (map? %) (contains? % :chave)) resultado))
-    (let [agrupar (last (filter (fn [[tipo]] (= tipo :agrupar-por))
-                                (:estagios ast)))]
+      agrupar
       (if (empty? resultado)
         (println "(vazio)")
-        (imprimir-grupos resultado agrupar (tipos-do-esquema esquema))))
+        (imprimir-grupos resultado agrupar (tipos-do-esquema esquema)))
 
-    :else
-    (imprimir-registros resultado ast esquema)))
+      :else
+      (imprimir-registros resultado ast esquema))))
 
 ;; ---------------------------------------------------------------------------
 ;; Processamento de comandos
